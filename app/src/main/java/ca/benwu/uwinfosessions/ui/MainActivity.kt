@@ -11,6 +11,7 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import ca.benwu.uwinfosessions.R
+import ca.benwu.uwinfosessions.adapters.SessionAdapter
 import ca.benwu.uwinfosessions.models.InfoSession
 import ca.benwu.uwinfosessions.models.NetworkResponse
 import ca.benwu.uwinfosessions.utils.bindView
@@ -24,6 +25,7 @@ import retrofit2.http.Query
 import rx.Single
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
+import java.text.SimpleDateFormat
 
 class MainActivity : AppCompatActivity() {
 
@@ -105,12 +107,38 @@ class MainActivity : AppCompatActivity() {
         sessionLoadSubscription = sessionLoadSingle.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 {retrievedSessions ->
                     Log.i(TAG, "${retrievedSessions.size}")
-                    loadingCircle.visibility = View.GONE
+                    processSessions(retrievedSessions)
                 },
                 { error ->
                     Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
                     loadingCircle.visibility = View.GONE
                 }
         )
+    }
+
+    fun processSessions(sessions: List<InfoSession>) {
+        val sortedSessions = sessions.sortedBy { it.date }
+        sortedSessions.map { it.date = SimpleDateFormat("MMMM d, yyyy").format(SimpleDateFormat("yyyy-MM-dd").parse(it.date)) }
+
+        val sessionsByDate: MutableList<MutableList<InfoSession>> = mutableListOf()
+
+        var sessionIndex = 0
+        var prevDate: String? = null
+        var currentDateSessions: MutableList<InfoSession> = mutableListOf()
+        while (sessionIndex < sortedSessions.size) {
+            if(prevDate != null && sortedSessions[sessionIndex].date != prevDate) {
+                sessionsByDate.add(currentDateSessions)
+                currentDateSessions = mutableListOf()
+            }
+            prevDate = sortedSessions[sessionIndex].date
+            currentDateSessions.add(sortedSessions[sessionIndex])
+            ++sessionIndex
+        }
+
+        if(!sessionsByDate.contains(currentDateSessions)) {
+            sessionsByDate.add(currentDateSessions)
+        }
+
+        loadingCircle.visibility = View.GONE
     }
 }
