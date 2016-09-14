@@ -3,12 +3,13 @@ package ca.benwu.uwinfosessions.ui
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import butterknife.BindView
 import ca.benwu.uwinfosessions.R
 import ca.benwu.uwinfosessions.models.InfoSession
 import ca.benwu.uwinfosessions.models.NetworkResponse
+import ca.benwu.uwinfosessions.utils.bindView
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -31,11 +32,11 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
 
     var sessionLoadSubscription: Subscription? = null
 
-    @BindView(R.id.loadingCircle)
-    lateinit var loadingCircle: ProgressBar
+    //@BindView(R.id.loadingCircle)
+    val loadingCircle: ProgressBar by bindView<ProgressBar>(R.id.loadingCircle)
 
-    @BindView(R.id.twoWayViewPager)
-    lateinit var sessionPager: HorizontalInfiniteCycleViewPager
+    //@BindView(R.id.twoWayViewPager)
+    val sessionPager: HorizontalInfiniteCycleViewPager by bindView<HorizontalInfiniteCycleViewPager>(R.id.twoWayViewPager)
 
     private val sessionLoadSingle: Single<List<InfoSession>> = Single.create {
         subscriber ->
@@ -59,9 +60,11 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
         sessionLoadSubscription = sessionLoadSingle.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
                 {retrievedSessions ->
                     Log.i(TAG, "${retrievedSessions.size}")
+                    loadingCircle.visibility = View.GONE
                 },
                 { error ->
                     Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+                    loadingCircle.visibility = View.GONE
                 }
         )
     }
