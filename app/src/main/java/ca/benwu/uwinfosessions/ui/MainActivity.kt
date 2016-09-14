@@ -1,7 +1,11 @@
 package ca.benwu.uwinfosessions.ui
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v4.app.ActivityCompat
+import android.support.v4.content.ContextCompat
 import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
@@ -14,17 +18,14 @@ import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
-import retrofit2.http.Path
-import rx.Observable
 import rx.Subscription
-import java.util.concurrent.Callable
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.Query
 import rx.Single
 import rx.android.schedulers.AndroidSchedulers
 import rx.schedulers.Schedulers
 
-class MainActivity : AppCompatActivity() { // TODO: runtime permissions
+class MainActivity : AppCompatActivity() {
 
     private val TAG = this.javaClass.simpleName
 
@@ -32,10 +33,10 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
 
     var sessionLoadSubscription: Subscription? = null
 
-    //@BindView(R.id.loadingCircle)
+    val INTERNET_PERMISSION_CODE = 2143;
+
     val loadingCircle: ProgressBar by bindView<ProgressBar>(R.id.loadingCircle)
 
-    //@BindView(R.id.twoWayViewPager)
     val sessionPager: HorizontalInfiniteCycleViewPager by bindView<HorizontalInfiniteCycleViewPager>(R.id.twoWayViewPager)
 
     private val sessionLoadSingle: Single<List<InfoSession>> = Single.create {
@@ -57,16 +58,13 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
 
         setupApiCall()
 
-        sessionLoadSubscription = sessionLoadSingle.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
-                {retrievedSessions ->
-                    Log.i(TAG, "${retrievedSessions.size}")
-                    loadingCircle.visibility = View.GONE
-                },
-                { error ->
-                    Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
-                    loadingCircle.visibility = View.GONE
-                }
-        )
+        val internetPermission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET)
+
+        if (internetPermission != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.INTERNET), INTERNET_PERMISSION_CODE)
+        } else {
+            loadSessions()
+        }
     }
 
     override fun onDestroy() {
@@ -74,6 +72,16 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
 
         if(sessionLoadSubscription != null && !sessionLoadSubscription!!.isUnsubscribed) {
             sessionLoadSubscription!!.unsubscribe()
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        if(requestCode == INTERNET_PERMISSION_CODE) {
+            if(grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                loadSessions()
+            } else {
+                Toast.makeText(this, "Internet permission is required", Toast.LENGTH_LONG).show();
+            }
         }
     }
 
@@ -91,5 +99,18 @@ class MainActivity : AppCompatActivity() { // TODO: runtime permissions
                 .build()
 
         sessionCall = retrofit.create(SessionCall::class.java)
+    }
+
+    fun loadSessions() {
+        sessionLoadSubscription = sessionLoadSingle.subscribeOn(Schedulers.io()).observeOn(AndroidSchedulers.mainThread()).subscribe(
+                {retrievedSessions ->
+                    Log.i(TAG, "${retrievedSessions.size}")
+                    loadingCircle.visibility = View.GONE
+                },
+                { error ->
+                    Toast.makeText(this, error.message, Toast.LENGTH_SHORT).show()
+                    loadingCircle.visibility = View.GONE
+                }
+        )
     }
 }
