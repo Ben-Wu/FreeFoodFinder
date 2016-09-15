@@ -5,17 +5,14 @@ import android.support.v4.view.PagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import ca.benwu.uwinfosessions.R
 import ca.benwu.uwinfosessions.models.InfoSession
-import ca.benwu.uwinfosessions.utils.bindView
-import com.gigamole.infinitecycleviewpager.VerticalInfiniteCycleViewPager
 
 /**
  * Created by Ben Wu on 2016-09-13.
  */
-class SessionAdapter(private val context: Context, private val sessions: List<InfoSession>): PagerAdapter() {
+class DateAdapter(private val context: Context, private val sessions: List<List<InfoSession>>): PagerAdapter() {
 
     val layoutInflater = LayoutInflater.from(context)
 
@@ -30,11 +27,11 @@ class SessionAdapter(private val context: Context, private val sessions: List<In
     override fun instantiateItem(container: ViewGroup?, position: Int): Any {
         val view: View
 
-        view = layoutInflater.inflate(R.layout.item_session_info, container, false)
+        view = layoutInflater.inflate(R.layout.item_date, container, false)
 
-        val employerName: TextView = view.findViewById(R.id.employerName) as TextView
+        val employerName: TextView = view.findViewById(R.id.date) as TextView
 
-        employerName.text = sessions[position].employer
+        employerName.text = sessions[position][0].date
 
         //val verticalInfiniteCycleViewPager = view.findViewById(R.id.vicvp) as VerticalInfiniteCycleViewPager
         //verticalInfiniteCycleViewPager.adapter = VerticalPagerAdapter(mContext, TWO_WAY_LIBRARIES[position])

@@ -11,11 +11,12 @@ import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import ca.benwu.uwinfosessions.R
-import ca.benwu.uwinfosessions.adapters.SessionAdapter
+import ca.benwu.uwinfosessions.adapters.DateAdapter
 import ca.benwu.uwinfosessions.models.InfoSession
 import ca.benwu.uwinfosessions.models.NetworkResponse
 import ca.benwu.uwinfosessions.utils.bindView
 import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
+import com.gigamole.infinitecycleviewpager.VerticalViewPager
 import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.http.GET
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
 
     val loadingCircle: ProgressBar by bindView<ProgressBar>(R.id.loadingCircle)
 
-    val sessionPager: HorizontalInfiniteCycleViewPager by bindView<HorizontalInfiniteCycleViewPager>(R.id.twoWayViewPager)
+    val datePager: VerticalViewPager by bindView<VerticalViewPager>(R.id.dateViewPager)
 
     private val sessionLoadSingle: Single<List<InfoSession>> = Single.create {
         subscriber ->
@@ -118,7 +119,7 @@ class MainActivity : AppCompatActivity() {
 
     fun processSessions(sessions: List<InfoSession>) {
         val sortedSessions = sessions.sortedBy { it.date }
-        sortedSessions.map { it.date = SimpleDateFormat("MMMM d, yyyy").format(SimpleDateFormat("yyyy-MM-dd").parse(it.date)) }
+        sortedSessions.map { it.date = it.day + "\n" + SimpleDateFormat("MMMM d, yyyy").format(SimpleDateFormat("yyyy-MM-dd").parse(it.date)) }
 
         val sessionsByDate: MutableList<MutableList<InfoSession>> = mutableListOf()
 
@@ -140,5 +141,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         loadingCircle.visibility = View.GONE
+
+        datePager.adapter = DateAdapter(this, sessionsByDate)
     }
 }

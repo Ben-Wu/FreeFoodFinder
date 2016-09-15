@@ -8,7 +8,7 @@
     tools:context=".ui.MainActivity">
 
     <com.gigamole.infinitecycleviewpager.VerticalViewPager
-        android:id="@+id/twoWayViewPager"
+        android:id="@+id/dateViewPager"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:icvp_center_page_scale_offset="0dp"
