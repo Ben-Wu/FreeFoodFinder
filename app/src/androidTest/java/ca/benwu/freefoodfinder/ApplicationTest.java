@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions;
+package ca.benwu.freefoodfinder;
 
 import android.app.Application;
 import android.test.ApplicationTestCase;

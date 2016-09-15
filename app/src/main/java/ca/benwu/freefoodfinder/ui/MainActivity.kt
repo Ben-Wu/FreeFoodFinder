@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.ui
+package ca.benwu.freefoodfinder.ui
 
 import android.Manifest
 import android.content.pm.PackageManager
@@ -10,11 +10,11 @@ import android.util.Log
 import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
-import ca.benwu.uwinfosessions.R
-import ca.benwu.uwinfosessions.adapters.DateAdapter
-import ca.benwu.uwinfosessions.models.InfoSession
-import ca.benwu.uwinfosessions.models.NetworkResponse
-import ca.benwu.uwinfosessions.utils.bindView
+import ca.benwu.freefoodfinder.R
+import ca.benwu.freefoodfinder.adapters.DateAdapter
+import ca.benwu.freefoodfinder.models.InfoSession
+import ca.benwu.freefoodfinder.models.NetworkResponse
+import ca.benwu.freefoodfinder.utils.bindView
 import com.gigamole.infinitecycleviewpager.VerticalViewPager
 import retrofit2.Call
 import retrofit2.Retrofit
@@ -117,7 +117,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun processSessions(sessions: List<InfoSession>) {
-        val sortedSessions = sessions.sortedBy { it.date }
+        val sortedSessions = sessions.sortedBy { it.startTime }.sortedBy { it.date }
         sortedSessions.map { it.date = it.day + "\n" + SimpleDateFormat("MMMM d, yyyy").format(SimpleDateFormat("yyyy-MM-dd").parse(it.date)) }
 
         val sessionsByDate: MutableList<MutableList<InfoSession>> = mutableListOf()

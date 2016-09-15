@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.adapters
+package ca.benwu.freefoodfinder.adapters
 
 /**
  * Created by Ben Wu on 2016-09-14.
@@ -9,8 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import ca.benwu.uwinfosessions.R
-import ca.benwu.uwinfosessions.models.InfoSession
+import ca.benwu.freefoodfinder.R
+import ca.benwu.freefoodfinder.models.InfoSession
 
 import java.util.ArrayList
 

@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.adapters
+package ca.benwu.freefoodfinder.adapters
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter
@@ -7,9 +7,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import ca.benwu.uwinfosessions.R
-import ca.benwu.uwinfosessions.models.InfoSession
-import ca.benwu.uwinfosessions.utils.ShadowTransformer
+import ca.benwu.freefoodfinder.R
+import ca.benwu.freefoodfinder.models.InfoSession
+import ca.benwu.freefoodfinder.utils.ShadowTransformer
 
 /**
  * Created by Ben Wu on 2016-09-13.

@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.utils
+package ca.benwu.freefoodfinder.utils
 
 /**
  * Created by Ben Wu on 2016-09-14.

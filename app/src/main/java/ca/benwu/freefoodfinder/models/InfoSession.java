@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.models;
+package ca.benwu.freefoodfinder.models;
 
 import com.google.gson.annotations.SerializedName;
 

@@ -1,4 +1,4 @@
-package ca.benwu.uwinfosessions.models;
+package ca.benwu.freefoodfinder.models;
 
 /**
  * Created by Ben Wu on 2016-09-13.

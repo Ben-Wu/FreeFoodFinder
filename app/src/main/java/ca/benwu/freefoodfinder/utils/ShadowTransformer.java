@@ -1,10 +1,10 @@
-package ca.benwu.uwinfosessions.utils;
+package ca.benwu.freefoodfinder.utils;
 
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.CardView;
 import android.view.View;
 
-import ca.benwu.uwinfosessions.adapters.SessionAdapter;
+import ca.benwu.freefoodfinder.adapters.SessionAdapter;
 
 
 public class ShadowTransformer implements ViewPager.OnPageChangeListener, ViewPager.PageTransformer {
