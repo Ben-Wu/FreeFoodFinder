@@ -2,12 +2,14 @@ package ca.benwu.uwinfosessions.adapters
 
 import android.content.Context
 import android.support.v4.view.PagerAdapter
+import android.support.v4.view.ViewPager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import ca.benwu.uwinfosessions.R
 import ca.benwu.uwinfosessions.models.InfoSession
+import ca.benwu.uwinfosessions.utils.ShadowTransformer
 
 /**
  * Created by Ben Wu on 2016-09-13.
@@ -33,9 +35,15 @@ class DateAdapter(private val context: Context, private val sessions: List<List<
 
         employerName.text = sessions[position][0].date
 
-        //val verticalInfiniteCycleViewPager = view.findViewById(R.id.vicvp) as VerticalInfiniteCycleViewPager
-        //verticalInfiniteCycleViewPager.adapter = VerticalPagerAdapter(mContext, TWO_WAY_LIBRARIES[position])
-        //verticalInfiniteCycleViewPager.currentItem = 0
+        val viewPager = view.findViewById(R.id.sessionPager) as ViewPager
+        val sessionAdapter = SessionAdapter(sessions[position])
+        val shadowTransformer = ShadowTransformer(viewPager, sessionAdapter)
+
+        shadowTransformer.enableScaling(true)
+
+        viewPager.adapter = sessionAdapter
+        viewPager.setPageTransformer(false, shadowTransformer)
+        viewPager.offscreenPageLimit = 3
 
         container!!.addView(view)
         return view

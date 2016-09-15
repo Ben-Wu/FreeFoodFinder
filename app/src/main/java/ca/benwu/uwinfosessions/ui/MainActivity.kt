@@ -15,7 +15,6 @@ import ca.benwu.uwinfosessions.adapters.DateAdapter
 import ca.benwu.uwinfosessions.models.InfoSession
 import ca.benwu.uwinfosessions.models.NetworkResponse
 import ca.benwu.uwinfosessions.utils.bindView
-import com.gigamole.infinitecycleviewpager.HorizontalInfiniteCycleViewPager
 import com.gigamole.infinitecycleviewpager.VerticalViewPager
 import retrofit2.Call
 import retrofit2.Retrofit
